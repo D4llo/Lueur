@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lueur</title>
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 115 115%22><text y=%22.9em%22 font-size=%2290%22>🕯️</text></svg>">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+
+    <style>
+        :root {
+            --focus: var(--code);
+            --links: var(--code);
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            margin: 0 auto;
+        }
+
+        ol,
+        ul {
+            counter-reset: item;
+            margin-left: 0;
+            padding-left: 0;
+        }
+
+        li {
+            display: none;
+            margin-bottom: 2em;
+        }
+
+        li:first-child {
+            display: block;
+        }
+
+        li::before {
+            display: block;
+            content: "Question " counter(item) " sur 12";
+            counter-increment: item;
+            width: 50%;
+            text-align: center;
+            margin: 0 auto;
+            border-bottom: 1px solid var(--code);
+            margin-bottom: 1em;
+        }
+
+        a {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+        }
+
+        @media print {
+
+            html,
+            body {
+                height: initial;
+            }
+
+            body {
+                display: initial;
+                grid-template-rows: initial;
+                margin: 0 auto;
+            }
+
+            h1 {
+                font-size: 1.5em;
+                font-weight: normal;
+            }
+
+            li {
+                margin-bottom: 0;
+                display: block;
+                break-inside: avoid;
+            }
+
+            li:before {
+                display: inline-block;
+                width: auto;
+                text-align: left;
+                margin: 0;
+            }
+
+            ol>li:before {
+                content: counter(item) ".";
+                margin-bottom: 0;
+            }
+
+            ul>li:before {
+                display: inline-block;
+                content: "[" counter(item) "]: ";
+                margin-right: 3mm;
+            }
+
+            legend {
+                display: inline;
+                font-weight: normal;
+            }
+
+            a {
+                text-decoration: none;
+            }
+
+            hr {
+                border: none;
+                border-top: 3px double #333;
+                color: #333;
+                overflow: visible;
+                text-align: center;
+                height: 1x;
+            }
+
+            hr:after {
+                background: #fff;
+                content: '@';
+                padding: 0 4px;
+                position: relative;
+                top: -13px;
+            }
+
+            footer,
+            #result, main p:nth-of-type(2) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>🕯️ Lueur</h1>
+    </header>
+    <main>
+        <p>A partir de <a href="http://www.souffrance-et-travail.com/media/formation/ppt/SET-Burn_Out.pptx">l'étude</a>
+            réalisée par la psychiatre française <a
+                href="https://www.cairn.info/publications-de-Guiho-Bailly-Marie-Pierre--24361.htm">Marie-Pierre
+                Guiho-Bailly</a>, <a
+                href="https://www.francetvinfo.fr/sante/burn-out-les-douze-signes-qui-doivent-vous-alerter_572561.html">francetv
+                info a listé</a> les
+            douze signes qui précèdent l'effondrement physique et psychique propre à un burn out.</p>
+        <p>Pour savoir si vous êtes atteint par ce syndrome des temps modernes, répondez par "OUI" ou par "NON" à chaque
+            phrase.</p>
+        <form>
+            <ol>
+                <li>
+                    <fieldset>
+                        <legend>Pour x raisons – changement de poste, de chef, restructuration, nouvelles missions, etc.
+                            – vous avez
+                            le sentiment de ne plus être aussi efficace au travail.
+                        </legend>
+                        <div>
+                            <label><input name="question1" value="1" id="yes1" type="radio">Oui</label>
+                            <label><input name="question1" value="0" id="nop1" type="radio">Non</label>
+                        </div>
+                    </fieldset>
+                </li>
+
+                <li>
+                    <fieldset>
+                        <legend>Vous présentez des troubles de l'attention, de concentration, de mémoire. Vous ne
+                            trouvez pas vos
+                            mots,
+                            vous faites des erreurs.
+                        </legend>
+                        <div>
+                            <label><input name="question2" value="1" id="yes2" type="radio">Oui</label>
+                            <label><input name="question2" value="0" id="nop2" type="radio">Non</label>
+                        </div>
+                    </fieldset>
+                </li>
+                <li>
+                    <fieldset>
+                        <legend>
+                            Vous compensez avec des horaires à rallonge pour tenter de retrouver l'efficience
+                            antérieure. En
+                            vain.
+                        </legend>
+                        <div>
+                            <label><input name="question3" value="1" id="yes3" type="radio">Oui</label>
+                            <label><input name="question3" value="0" id="nop3" type="radio">Non</label>
+                        </div>
+                    </fieldset>
+                </li>
+                <li>
+                    <fieldset>
+                        <legend>
+                            Le repos n'est plus réparateur. Au réveil, au retour d'un week-end ou de vacances, la
+                            fatigue
+                            revient
+                            aussitôt. Vos ruminations sur le travail vous empêchent de dormir.
+                        </legend>
+                        <div>
+                            <label><input name="question4" value="1" id="yes4" type="radio">Oui</label>
+                            <label><input name="question4" value="0" id="nop4" type="radio">Non</label>
+                        </div>
+                    </fieldset>
+                </li>
+                <li>
+                    <fieldset>
+                        <legend>
+                            Contrairement à une dépression, vous n'avez pas le goût à rien, vous n'êtes pas triste tout
+                            le
+                            temps.
+                            Mais le travail est votre principale préoccupation.
+                        </legend>
+                        <div>
+                            <label><input name="question5" value="1" id="yes5" type="radio">Oui</label>
+                            <label><input name="question5" value="0" id="nop5" type="radio">Non</label>
+                        </div>
+                    </fieldset>
+                </li>
+                <li>
+                    <fieldset>
+                        <legend>
+                            Vous vous montrez irritable, vous avez des accès de colère. Vous passez facilement du rire
+                            aux
+                            larmes.
+                        </legend>
+                        <div>
+                            <label><input name="question6" value="1" id="yes6" type="radio">Oui</label>
+                            <label><input name="question6" value="0" id="nop6" type="radio">Non</label>
+                        </div>
+                    </fieldset>
+                </li>
+                <li>
+                    <fieldset>
+                        <legend>
+                            Votre entourage a beau vous alerter, vous êtes dans le déni par rapport à votre surmenage.
+                            Vous
+                            vous
+                            repliez sur vous, avec un sentiment de solitude grandissant.
+                        </legend>
+                        <div>
+                            <label><input name="question7" value="1" id="yes7" type="radio">Oui</label>
+                            <label><input name="question7" value="0" id="nop7" type="radio">Non</label>
+                        </div>
+                    </fieldset>
+                </li>
+                <li>
+                    <fieldset>
+                        <legend>
+                            Vous souffrez de maux de tête, de douleurs musculo-squelettiques, de troubles du
+                            comportement
+                            alimentaire, d'infections virales (ORL) à répétitions, de palpitations...
+                        </legend>
+                        <div>
+                            <label><input name="question8" value="1" id="yes8" type="radio">Oui</label>
+                            <label><input name="question8" value="0" id="nop8" type="radio">Non</label>
+                        </div>
+                    </fieldset>
+                </li>
+                <li>
+                    <fieldset>
+                        <legend>
+                            Pour tenir le coup, vous avez recours à des substances psychoactives (alcool, tabac,
+                            drogue).
+                        </legend>
+                        <div>
+                            <label><input name="question9" value="1" id="yes9" type="radio">Oui</label>
+                            <label><input name="question9" value="0" id="nop9" type="radio">Non</label>
+                        </div>
+                    </fieldset>
+                </li>
+                <li>
+                    <fieldset>
+                        <legend>
+                            Vous ressentez un épuisement émotionnel, renforcé par le déni de l’encadrement à l'égard de
+                            votre
+                            situation. Vos tâches se transforment en mission impossible.
+                        </legend>
+                        <div>
+                            <label><input name="question10" value="1" id="yes10" type="radio">Oui</label>
+                            <label><input name="question10" value="0" id="nop10" type="radio">Non</label>
+                        </div>
+                    </fieldset>
+                </li>
+                <li>
+                    <fieldset>
+                        <legend>
+                            Vous avez un comportement à risque, accidentogène.
+                        </legend>
+                        <div>
+                            <label><input name="question11" value="1" id="yes11" type="radio">Oui</label>
+                            <label><input name="question11" value="0" id="nop11" type="radio">Non</label>
+                        </div>
+                    </fieldset>
+                </li>
+                <li>
+                    <fieldset>
+                        <legend>
+                            Bienveillant d’ordinaire, vous devenez cynique à l’égard de vos "usagers" au travail
+                            (patients,
+                            clients,
+                            public, etc.). Vous travaillez frénétiquement mais mécaniquement.
+                        </legend>
+                        <div>
+                            <label><input name="question12" value="1" id="yes12" type="radio">Oui</label>
+                            <label><input name="question12" value="0" id="nop12" type="radio">Non</label>
+                        </div>
+                    </fieldset>
+                </li>
+            </ol>
+        </form>
+
+        <!-- <section id="result">
+            <h2>Si vous répondez "OUI" aux cinq premiers signes</h2>
+            <p>Ne passez pas votre chemin. Les cinq premiers symptômes décrits ci-dessus sont déjà significatifs dans la mesure où le<em> "</em><em>sommeil non réparateur et l'hyperactivité compensatrice"</em> au travail sont deux des trois constantes d'un syndrome d'épuisement professionnel en gestation, selon Marie Pezé, psychologue spécialiste de la souffrance au travail contactée par francetv info. Pour autant, le burn-out <em>"est un processus, et non un état"</em> et son évolution est<em> "très lente"</em>, explique Catherine Vasey, auteure de <em>Burn-out : le détecter et le prévenir </em>(éd. Jouvence) dans le magazine <em style="font-size: 15px;"><a href="http://www.psychologies.com/Travail/Souffrance-au-travail/Burn-out/Articles-et-Dossiers/Burn-out-prevenir-l-epuisement-professionnel" target="_blank" rel="noopener" class="ftvi-click--binded" data-click-value="content::link-in-content::article::http://www.psychologies.com/Travail/Souffrance-au-travail/Burn-out/Articles-et-Dossiers/Burn-out-prevenir-l-epuisement-professionnel">Psychologies</a></em>. Autrement dit, il peut être interrompu en cours de route et présente différents degrés de gravité.</p>
+            <p>Pour évaluer plus précisément votre degré d'usure, vous pouvez <a href="http://www.masef.com/scores/burnoutsyndromeechellembi.htm" target="_blank" rel="noopener" class="ftvi-click--binded" data-click-value="content::link-in-content::article::http://www.masef.com/scores/burnoutsyndromeechellembi.htm">effectuer ce test en ligne</a>. Le Malash Burn Out Inventory (MBI), conçu en 1981 par des chercheurs américains et validé au niveau international, permet de mesurer, séparément, le degré d'"épuisement émotionnel", de "dépersonnalisation" et d'"accomplissement personnel" au sein de son activité professionnelle.</p>
+            <p>Car à ce stade, des sentiments positifs peuvent subsister à l'égard de votre travail et il faut puiser dans ses ressources. <em>"Le principe de base, c'est de ne pas focaliser sur ce qui est stressant, usant"</em>, suggère Catherine Vasey, mais de se concentrer plutôt sur ce qui fait sens et apporte de la satisfaction. Lever le pied pour se ménager des moments de pause et de détente dans la journée est également essentiel. Objectif, selon la psychologue : <em>"Ne plus terminer une journée de travail en étant complètement épuisé, au point de ne plus pouvoir s'investir dans sa vie privée. Il n'est pas juste de sacrifier toute son énergie au travail."</em></p>
+            <h2>Si vous répondez "OUI" jusqu'au dixième signe</h2>
+            <p><span>Le processus est bien enclenché, notamment si vous commencez à somatiser, en souffrant de maux physiques chroniques. Si vous consultez un médecin à ce sujet, c'est le moment d'aborder le fond du problème. <em>"Quand on sort du déni, on a déjà fait la moitié du chemin"</em>, souligne auprès de francetv info François Baumann, médecin et auteur de<em> Burn-out, quand le travail rend malade</em> (éd. Josette Lyon). Un arrêt de travail temporaire peut être envisagé pour prendre du recul et enrayer le processus. Le site Souffrance et travail publie la <a href="http://www.souffrance-et-travail.com/infos-utiles/listes/liste-consultations-souffrance-travail/" target="_blank" rel="noopener" class="ftvi-click--binded" data-click-value="content::link-in-content::article::http://www.souffrance-et-travail.com/infos-utiles/listes/liste-consultations-souffrance-travail/">liste des consultations spécialisées</a> par département.<br></span></p>
+            <p><span>Des stratégies peuvent aussi être mises en place dans votre milieu professionnel. <em>"Vous n'osez pas dire non à un surcroît de travail alors que vous êtes déjà débordé ? Essayez le 'oui, mais plus tard', ou bien 'oui, mais aide-moi'"</em>, suggère Agnès Martineau-Arbes, médecin du travail, dans <a href="http://www.lexpress.fr/emploi/gestion-carriere/video-burn-out-comment-le-travail-nous-fait-craquer_1316114.html" target="_blank" rel="noopener" class="ftvi-click--binded" data-click-value="content::link-in-content::article::http://www.lexpress.fr/emploi/gestion-carriere/video-burn-out-comment-le-travail-nous-fait-craquer_1316114.html"><em>L'Express</em></a>. Il faut commencer par accepter et reconnaître ses propres limites et apprendre à déléguer. Car dans le burn-out, <em>"on est souvent son pire ennemi"</em>, analyse la spécialiste.</span></p>
+            <p><span>Catherine Vasey propose quant à elle d'identifier<em> "</em></span><em>les lieux d'usure"</em> dans le travail afin de s'en extraire. <em>"Ce sont des tâches, des situations ou des personnes qui créent chez vous un sentiment d’impuissance, de lourdeur, de fatigue. Qui vous vident de votre énergie."</em> Et vous conduisent directement au signal numéro 10 : l'épuisement émotionnel, symptôme typique du burn-out.</p>
+            <h2>Si vous répondez "OUI" au douzième et dernier signe</h2>
+            <p>Attention, vous courez droit à la catastrophe. Le cynisme est généralement la dernière étape avant le burn-out. Le médecin ne se soucie plus de ses patients, le commercial vend n'importe quoi à ses clients et l'éleveur ne s'occupe plus de ses bêtes. C'est ce que les spécialistes nomment la phase de la "dépersonnalisation" et de la "déshumanisation".</p>
+            <p><span>Arrivé à ce stade, le surmenage est déjà bien installé et, généralement, l'organisme craque en premier : zona, ulcère, accident cardio-vasculaire... Cela peut, dans les cas les plus graves, aller jusqu'à la mort par excès de travail. Un phénomène baptisé "karoshi" au Japon. Le suicide est l'autre alternative dramatique du burn-out. </span></p>
+            <p>Sur le plan psychique, un grand sentiment de vide vous envahit soudainement, <em>"comme un trou d'air en avion"</em>, dépeint Agnès Martineau-Arbes. Il est alors impossible de retourner travailler et cette incapacité peut durer de quelques mois à plusieurs années. Il faut alors entamer un long travail de reconstruction, dont les étapes sont décrites dans une <a href="http://www.inrs.fr/accueil/produits/mediatheque/doc/publications.html?refINRS=TF%20216" target="_blank" rel="noopener" class="ftvi-click--binded" data-click-value="content::link-in-content::article::http://www.inrs.fr/accueil/produits/mediatheque/doc/publications.html?refINRS=TF%20216">récente étude</a> de l'Institut national de recherche et de sécurité. S'il est bien accompagné (par un médecin du travail, un psychologue...), il peut être l'occasion de reconsidérer son rapport au travail et au temps. Et d'envisager <a href="/economie/emploi/reconversion-professionnelle/" target="_blank" rel="noopener" class="ftvi-click--binded" data-click-value="content::link-in-content::article::/economie/emploi/reconversion-professionnelle/">une reconversion</a>.</p>
+        </section> -->
+
+        <section id="result" style="display: none; place-items: center;">
+            <button type="button" onclick="window.print()">🖨️ Imprimer ce sondage</button>
+        </section>
+    </main>
+
+    <footer>Fait par <a href="https://github.com/D4llo/">@D4llo</a> - Faites attention à vous les gens - Consulter est
+        une force</footer>
+    <script>
+        const bindInputShow = input => {
+            input.onclick = (e) => {
+                const li = e.target.parentElement.parentElement.parentElement.parentElement;
+                if (li.nextElementSibling && li.nextElementSibling.style.display !== "block") {
+                    li.nextElementSibling.style.display = "block";
+                    li.nextElementSibling.scrollIntoView();
+                }
+
+                if (!li.nextElementSibling) {
+                    const result = document.querySelector('#result');
+                    result.style.display = "grid";
+                    result.scrollIntoView();
+                }
+            }
+        }
+
+        document.querySelectorAll("input").forEach(x => {
+            x.checked = false;
+            bindInputShow(x);
+        });
+
+        window.onbeforeprint = event => {
+            document.querySelectorAll('input:checked').forEach(input =>
+                input.setAttribute("checked", "true")
+            );
+            document.querySelectorAll('fieldset').forEach(item => {
+                item.insertAdjacentHTML("beforebegin", `<span class="fieldset">${item.innerHTML}</span>`);
+                item.parentElement.removeChild(item);
+            });
+
+            const references = document.createElement("ul")
+            references.id = "references"
+            document.querySelectorAll('main a').forEach((a, i) => {
+                const reference = document.createElement("span");
+                reference.textContent = ` [${i + 1}]`;
+                a.insertAdjacentElement("afterend", reference);
+
+                const line = document.createElement("li");
+                line.textContent = a.href;
+                references.appendChild(line);
+            })
+
+            const hr = document.createElement("hr")
+            hr.id = "hr"
+            document.body.appendChild(hr);
+            document.body.appendChild(references);
+        };
+
+        window.onafterprint = event => {
+            document.querySelectorAll('.fieldset').forEach(item => {
+                item.insertAdjacentHTML("beforebegin", "<fieldset>" + item.innerHTML + "</fieldset>");
+                item.parentElement.removeChild(item);
+            });
+
+            document.querySelectorAll("input").forEach(bindInputShow);
+
+            document.querySelectorAll('a + span').forEach(span => {
+                span.parentElement.removeChild(span);
+            })
+
+            document.body.removeChild(document.querySelector("#hr"));
+            document.body.removeChild(document.querySelector("#references"));
+        };
+    </script>
+
+</body>
+
+</html>
