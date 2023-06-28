@@ -132,7 +132,9 @@
             }
 
             footer,
-            #result, main p:nth-of-type(2) {
+            #result,
+            button,
+            main p:nth-of-type(2) {
                 display: none;
             }
         }
@@ -330,28 +332,35 @@
             <p>Sur le plan psychique, un grand sentiment de vide vous envahit soudainement, <em>"comme un trou d'air en avion"</em>, dépeint Agnès Martineau-Arbes. Il est alors impossible de retourner travailler et cette incapacité peut durer de quelques mois à plusieurs années. Il faut alors entamer un long travail de reconstruction, dont les étapes sont décrites dans une <a href="http://www.inrs.fr/accueil/produits/mediatheque/doc/publications.html?refINRS=TF%20216" target="_blank" rel="noopener" class="ftvi-click--binded" data-click-value="content::link-in-content::article::http://www.inrs.fr/accueil/produits/mediatheque/doc/publications.html?refINRS=TF%20216">récente étude</a> de l'Institut national de recherche et de sécurité. S'il est bien accompagné (par un médecin du travail, un psychologue...), il peut être l'occasion de reconsidérer son rapport au travail et au temps. Et d'envisager <a href="/economie/emploi/reconversion-professionnelle/" target="_blank" rel="noopener" class="ftvi-click--binded" data-click-value="content::link-in-content::article::/economie/emploi/reconversion-professionnelle/">une reconversion</a>.</p>
         </section> -->
 
-        <section id="result" style="display: none; place-items: center;">
-            <button type="button" onclick="window.print()">🖨️ Imprimer ce sondage</button>
+        <section id="result" style="display: none; justify-content: center;">
+            <button type="button" onclick="window.print()">🖨️ Imprimer</button>
+            <button type="button" onclick="share()">🔗 Partager</button>
         </section>
     </main>
 
     <footer>Fait par <a href="https://github.com/D4llo/">@D4llo</a> - Faites attention à vous les gens - Consulter est
         une force</footer>
     <script>
-        const bindInputShow = input => {
-            input.onclick = (e) => {
-                const li = e.target.parentElement.parentElement.parentElement.parentElement;
-                if (li.nextElementSibling && li.nextElementSibling.style.display !== "block") {
-                    li.nextElementSibling.style.display = "block";
-                    li.nextElementSibling.scrollIntoView();
-                }
+        const showResult = () => {
+            const result = document.querySelector('#result');
+            result.style.display = "flex";
+            result.scrollIntoView();
+        }
 
-                if (!li.nextElementSibling) {
-                    const result = document.querySelector('#result');
-                    result.style.display = "grid";
-                    result.scrollIntoView();
-                }
+        const showNext = (li) => {
+            if (li.nextElementSibling && li.nextElementSibling.style.display !== "block") {
+                li.nextElementSibling.style.display = "block";
+                li.nextElementSibling.scrollIntoView();
+                return;
             }
+
+            if (!li.nextElementSibling) {
+                showResult();
+            }
+        }
+
+        const bindInputShow = input => {
+            input.onclick = (e) => showNext(e.target.parentElement.parentElement.parentElement.parentElement)
         }
 
         document.querySelectorAll("input").forEach(x => {
@@ -401,6 +410,106 @@
             document.body.removeChild(document.querySelector("#hr"));
             document.body.removeChild(document.querySelector("#references"));
         };
+
+        const share = () => {
+            const answers = [...document.querySelectorAll('input:checked')].map(input => input.id.slice(0, 1)).join("").toUpperCase();
+            const url = new URL(window.location.href);
+            url.searchParams.delete("a");
+            url.searchParams.append("a", zip(answers));
+
+            // improve idea: custom dialog prompt with custom buttom. a11y?
+            const result = prompt("Copy and share the following link:", url.href);
+            if (result !== null && result !== "") {
+                navigator.clipboard.writeText(url.href).then(() => {
+                    console.log('Copying to clipboard was successful!');
+                }, (err) => {
+                    console.error('Could not copy text: ', err);
+                });
+            }
+        }
+
+        // YYNYYYYYYNNN => Y2NY6N3
+        const zip = input => {
+            let m = 1;
+            const result = [input[0]]
+            for (let i = 1; i < input.length; i++) {
+                if (input[i] === input[i - 1]) {
+                    m += 1;
+                    continue;
+                }
+                if (m != 1) {
+                    result.push(m);
+                    m = 1;
+                    result.push(input[i]);
+                    continue;
+                }
+                result.push(input[i]);
+            }
+            if (m != 1)
+                result.push(m);
+            return result.join("")
+        }
+
+        const last = array => array[array.length - 1];
+
+        const zip2 = input =>
+            input.slice(1).reduce(([acc, m], b) => {
+                if (b == last(acc)) {
+                    return [acc, m + 1]
+                }
+                if (m != 1) {
+                    return [acc + m + b, 1]
+                }
+                return [acc + b, m]
+                result.push(input[i]);
+            }, [input[0], 1])[0]
+
+        // Y 2 => YY
+        // Y 7 => YYYYYYY
+        const mulc = (c, n) => [...new Array(n)].map(_ => c).join("")
+
+        const isNumber = c => c >= '0' && c <= '9';
+
+        // YYNY6N3 => YYNYYYYYYNNN
+        // Y2NY6N3 => YYNYYYYYYNNN
+        const unzip = input => {
+            let result = "";
+            for (let i = 0; i < input.length; i++) {
+                if (!isNumber(input[i])) {
+                    result += input[i];
+                    continue;
+                }
+                const c = input[i - 1];
+                let n = "";
+                for (; i < input.length && isNumber(input[i]); i++) {
+                    n += input[i];
+                }
+                i--;
+                if (n === "0") {
+                    result = result.slice(0, -1);
+                    continue;
+                }
+                result += mulc(c, n - 1);
+            }
+            return result;
+        }
+
+        const binarize = input => [...input].map(c => c == "Y" ? 0 : 1);
+
+        const parameters = Object.fromEntries(window.location.search.slice(1).split("&").map(x => x.split("=")))
+
+        if (parameters["a"]) {
+            const answers = binarize(unzip(parameters["a"]));
+            document.querySelectorAll('fieldset').forEach(fieldset => {
+                if (answers.length === 0) {
+                    return;
+                }
+                const input = fieldset.querySelectorAll("input[type=radio]")[answers.shift()]
+                input.checked = true;
+                showNext(fieldset.parentElement);
+            })
+        }
+
     </script>
 
 </body>
